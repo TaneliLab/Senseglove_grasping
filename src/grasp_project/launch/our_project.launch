@@ -1,0 +1,36 @@
+<launch>
+    <!-- args for sense gloves-->
+    <arg name="calibration_mode" default="nothing" doc="Choose the calibration mode of the senseglove; nothing, minimum, normalized"/>
+    <arg name="calibration_file_right" default="None" doc="Name of the calibration file without.yaml, if it is equal to None no file will be loaded."/>
+
+    <arg name="use_rviz" default="false"/>
+    <arg name="use_left" default="false"/>
+    <arg name="use_right" default="true"/>
+    <arg name="use_both" value="$(eval arg('use_left') and arg('use_right'))"/>
+
+    <!-- HERE is Sense golve launch file with distance -->
+    <!--Passing through here ensures the use of the correct urdf_x.rviz file by overwriting if necessary-->
+    <arg name="rvizconfig" value="$(find senseglove_description)/urdf_left.rviz" if="$(eval use_both==false and use_left==true)"/>
+    <arg name="rvizconfig" value="$(find senseglove_description)/urdf_right.rviz" if="$(eval use_both==false and use_right==true)"/>
+    <arg name="rvizconfig" value="$(find senseglove_description)/urdf_both.rviz" if="$(eval use_both)"/>
+
+    <arg name="delay_time_senseglove" value="10"/>
+    <node pkg="senseglove_launch" type="startGlove.sh" name="startGlove" args="$(find senseglove_hardware) $(arg use_left) $(arg use_right)" output="screen" respawn="false" launch-prefix="bash -c 'sleep $(arg delay_time_senseglove); $0 $@'" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" if="$(eval use_rviz)"/>
+
+    <node name="senseglove_finger_distance_right" pkg="senseglove_finger_distance" type="senseglove_finger_distance_node" args="1 $(arg calibration_mode)" output="screen" launch-prefix="bash -c 'sleep $(arg delay_time_senseglove); $0 $@'">
+	    <remap from="/senseglove/0/rh/finger_distances" to="/rh/senseglove/finger_distances"/>
+        <rosparam command="load" file="$(find senseglove_shared_resources)/calibration/$(arg calibration_file_right).yaml" unless="$(eval calibration_file_right=='None')"/>
+    </node>
+
+    <!--<arg name="world_name" value="$(find grasp_project)/worlds/our_project.world" />-->
+    <!-- HERE is Shadow hand gazebo launch file -->
+    <include file="$(find sr_hand)/launch/gazebo/gazebo_hand.launch"/>
+
+    <!--Our arg
+    <arg name="delay_time_our_node" value="30"/>
+    
+    HERE is our bridge node
+    <node name="Bridge_Node" pkg="grasp_project" type="Bridge_Node" launch-prefix="bash -c 'sleep $(arg delay_time_our_node); $0 $@'" />-->
+
+</launch>

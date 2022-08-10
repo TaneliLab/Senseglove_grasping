@@ -1,0 +1,20 @@
+Session: 2022-03-01 11-51-14
+Running SenseCom v0.10
+OS: Linux - Linux 5.4 Ubuntu 18.04 64bit
+
+Pre-Initialization; connected Devices:
+
+Initialized communications with code: 1
+Successfully initialized Connection library
+
+Quitting next frame
+
+Shutdown initiated from SenseCom_Base. Final Device information: 
+Ports:
+
+Devices:
+0: SenseGlove DK1.3-R0014 (DK1.3) running firmware v4.8. Connected via Serial (/dev/ttyACM0)
+
+Attempting to close connections and dispose of resources...
+Disposed of communications with code: 1
+Successfully disposed of Connections library
