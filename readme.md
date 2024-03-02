@@ -1,5 +1,8 @@
 # Grasp Project with Senseglove
 
+## Demo
+[![Watch the video](https://img.youtube.com/vi/mCI7lBZvhL8/hqdefault.jpg)]([https://www.youtube.com/watch?v=xZprBYt4qMk](https://www.youtube.com/watch?v=mCI7lBZvhL8))
+
 #### ROS version is noetic
 
 ### How to launch our package
